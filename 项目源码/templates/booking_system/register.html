@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+  订票系统：注册
+{% endblock %}
+
+{% block css %}
+  <link href="{% static 'css/register.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block navbar_right %}
+    <li><a href="/booking_system/login/">已有账号？点此登录</a></li>
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+  <form class="form-login" action={% url 'booking_system:register' %} method="POST">
+    {% csrf_token %}
+    <h2 class="form-login-heading"> 用户注册 </h2>
+
+    {% if username_duplicate %}
+    <div class="form-group has-error">
+      <label for="inputUsername"> 用户名 </label>
+      <input type="text" id="inputUsername" name="username" class="form-control" placeholder="Username" aria-describedby="usernameHelpBlock" required autofocus>
+      <span id="usernameHelpBlock" class="help-block"> 用户名已被使用 </span>
+    </div>
+    {% else %}
+    <div class="form-group">
+      <label for="inputUsername"> 用户名 </label>
+      <input type="text" id="inputUsername" name="username" class="form-control" placeholder="Username" required autofocus>
+    </div>
+    {% endif %}
+
+    <div class="form-group">
+      <label for="inputPassword"> 密码 </label>
+      <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
+    </div>
+
+    {% if password_not_same %}
+    <div class="form-group has-error">
+      <label for="inputConfirmation"> 确认密码 </label>
+      <input type="password" id="inputConfirmation" name="confirmation" class="form-control" placeholder="Confirm password" aria-describedby="passwordHelpBlock" required>
+      <span id="passwordHelpBlock" class="help-block"> 两次密码不一致 </span>
+    </div>
+    {% else %}
+    <div class="form-group">
+      <label for="inputConfirmation"> 确认密码 </label>
+      <input type="password" id="inputConfirmation" name="confirmation" class="form-control" placeholder="Confirm password" required>
+    </div>
+    {% endif %}
+
+    {% if wrong_info %}
+    <div class="form-group has-error">
+      <label for="inputName"> 姓名 </label>
+      <input type="text" id="inputName" name="name" class="form-control" placeholder="Name" required>
+    </div>
+
+    <div class="form-group has-error">
+      <label for="inputID"> 身份证号或护照号 </label>
+      <input type="text" id="inputID" name="ID" class="form-control" placeholder="ID" aria-describedby="IDHelpBlock" required>
+      <span id="IDHelpBlock" class="help-block"> 姓名或证件号码有误 </span>
+    </div>
+    {% else %}
+    <div class="form-group">
+      <label for="inputName"> 姓名 </label>
+      <input type="text" id="inputName" name="name" class="form-control" placeholder="Name" required>
+    </div>
+
+    <div class="form-group">
+      <label for="inputID"> 身份证号或护照号 </label>
+      <input type="text" id="inputID" name="ID" class="form-control" placeholder="ID" required>
+    </div>
+    {% endif %}
+
+    <div class="form-group">
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+    </div>
+  </form>
+
+</div> <!-- /container -->
+
+{% endblock %}

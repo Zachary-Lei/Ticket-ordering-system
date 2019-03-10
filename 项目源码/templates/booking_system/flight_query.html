@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+  订票系统：查询航班
+{% endblock %}
+
+{% block css %}
+  <link href="{% static 'css/flight_query.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block navbar_right %}
+  {% if is_login %}
+    <li><a> {{ username }} </a></li>
+    <li><a href="/booking_system/logout/"> 注销 </a></li>
+  {% else %}
+    <li><a href="/booking_system/login/">登录</a></li>
+    <li><a href="/booking_system/register/">注册</a></li>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <form class="form-horizontal" role="form" action="{% url 'booking_system:flight_query' %}" method="POST">
+        {% csrf_token %}
+
+        <fieldset>
+          <legend> 查询航班 </legend>
+          <div class="form-group">
+            <label for="dept" class="col-md-1 control-label"> 出发地 </label>
+            <div class="col-md-3">
+              <input type="text" id="dept" name="dept" class="form-control" required>
+            </div>
+
+            <label for="dest" class="col-md-1 control-label"> 目的地 </label>
+            <div class="col-md-3">
+              <input type="text" id="dest" name="dest" class="form-control" required>
+            </div>
+
+            <label for="deptDate" class="col-md-1 control-label"> 出发日期 </label>
+            <div class="col-md-3">
+              <input type="date" id="deptDate" name="dept_date" class="form-control" required>
+            </div>
+          </div>
+
+          <div class="form-group text-center">
+            <button class="btn btn-primary btn-sm" type="submit"> 查询 </button>
+          </div>
+        </fieldset>
+
+      </form>
+
+    </div>
+  </div>
+
+  {% if show_table %}
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col" class="col-md-2 header-cell"> 航班号 </th>
+        <th scope="col" class="col-md-2 header-cell"> 机型 </th>
+        <th scope="col" class="col-md-2 header-cell"> 出发地 </th>
+        <th scope="col" class="col-md-2 header-cell"> 起飞时间 </th>
+        <th scope="col" class="col-md-2 header-cell"> 到达地 </th>
+        <th scope="col" class="col-md-2 header-cell"> 落地时间 </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for tp in result %}
+      <tr class="info-row">
+        <td class="body-cell">
+          <dl>
+            <dt> {{ tp.airline_name }}  </dt>
+            <dd> {{ tp.flight_id }} </dd>
+          </dl>
+        </td>
+        <td class="body-cell"> {{ tp.model_id }} </td>
+        <td class="body-cell"> {{ tp.dept_airport }} </td>
+        <td class="body-cell"> {{ tp.dept_datetime }} </td>
+        <td class="body-cell"> {{ tp.dest_airport }} </td>
+        <td class="body-cell"> {{ tp.dest_datetime }} </td>
+      </tr>
+      <tr class="book-row">
+        <td class="body-cell"> 头等舱剩余：{{ tp.first_left }} </td>
+        <td class="body-cell"> 商务舱剩余：{{ tp.business_left }} </td>
+        <td class="body-cell"> 经济舱剩余：{{ tp.economy_left }} </td>
+        <td></td>
+        <td></td>
+        <td class="body-cell text-center">
+          <a href="{% url 'booking_system:book_tickets' flight_id=tp.flight_id dept_datetime=tp.dept_datetime %}" class="btn btn-lg btn-primary"> 预订 </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+</div>
+{% endblock %}

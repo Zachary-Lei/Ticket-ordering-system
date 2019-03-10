@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+  订票系统：查阅订单
+{% endblock %}
+
+{% block css %}
+  <link href="{% static 'css/order_query.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block navbar_right %}
+  {% if is_login %}
+    <li><a> {{ username }} </a></li>
+    <li><a href="/booking_system/logout/"> 注销 </a></li>
+  {% else %}
+    <li><a href="/booking_system/login/">登录</a></li>
+    <li><a href="/booking_system/register/">注册</a></li>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+  <div class="container">
+    <h1> <br/> <br/> 查阅订单 </h1>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <form class="form-horizontal" role="form" action="{% url 'booking_system:order_query' %}" method="POST">
+        {% csrf_token %}
+
+        <fieldset>
+          <legend> order </legend>
+          
+        </fieldset>
+
+      </form>
+
+    </div>
+  </div>
+
+
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col" class="col-md-1 header-cell"> 订单号 </th>
+        <th scope="col" class="col-md-1 header-cell"> 顾客 </th>
+        <th scope="col" class="col-md-1 header-cell"> 订单时间 </th>
+        <th scope="col" class="col-md-1 header-cell"> 订单状态 </th>
+        <th scope="col" class="col-md-1 header-cell"> 订单详情 </th>
+        <th scope="col" class="col-md-1 header-cell"> 取消订单 </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for tp in result %}
+      <tr class="info-row">
+        <td class="body-cell"> {{ tp.order_id }} </td>
+        <td class="body-cell"> {{ tp.user_name }} </td>
+        <td class="body-cell"> {{ tp.order_time }} </td>
+        <td class="body-cell"> {{ tp.status }} </td>
+        <td class="body-cell">
+          <a href="{% url 'booking_system:ticket_query' order_id=tp.order_id %}" class="btn btn-lg btn-primary"> detail </a>
+        </td>
+        <td class="body-cell">
+          <a href="{% url 'booking_system:order_cancel' order_id=tp.order_id %}" class="btn btn-lg btn-primary"> cancel </a>
+        </td>
+
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+</div>
+{% endblock %}

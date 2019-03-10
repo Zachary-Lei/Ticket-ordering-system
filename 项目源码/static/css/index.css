@@ -1,0 +1,21 @@
+/* Move down content because we have a fixed navbar that is 50px tall */
+body {
+  padding-top: 50px;
+  padding-bottom: 20px;
+}
+
+.nav-prompt{
+  height: 200px;
+  padding-top: 50px;
+  padding-bottom: 30px;
+}
+
+.jumbotron{
+  margin: 0px;
+  padding: 0px;
+  height: 500px;
+  background-image: url(../image/aya.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: bottom;
+}

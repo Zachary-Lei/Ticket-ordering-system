@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+  订票系统：购票
+{% endblock %}
+
+{% block css %}
+  <link href="{% static 'css/book_tickets.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block navbar_right %}
+  {% if is_login %}
+    <li><a> {{ username }} </a></li>
+    <li><a href="/booking_system/logout/"> 注销 </a></li>
+  {% else %}
+    <li><a href="/booking_system/login/">登录</a></li>
+    <li><a href="/booking_system/register/">注册</a></li>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+  <form class="form-inline text-center" action="{% url 'booking_system:book_tickets' flight_id=flight_id dept_datetime=dept_datetime %}" method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="inputTicketNum"> 订票数量 </label>
+      <input type="number" id="inputTicketNum" name="ticket_num" class="form-control" placeholder="1" required autofocus>
+    </div>
+
+    <button class="btn btn-default" type="submit"> 确定 </button>
+  </form>
+
+</div> <!-- /container -->
+
+{% endblock %}

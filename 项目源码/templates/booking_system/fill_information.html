@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+  订票系统：填写信息
+{% endblock %}
+
+{% block css %}
+  <link href="{% static 'css/fill_information.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block navbar_right %}
+  {% if is_login %}
+    <li><a> {{ username }} </a></li>
+    <li><a href="/booking_system/logout/"> 注销 </a></li>
+  {% else %}
+    <li><a href="/booking_system/login/">登录</a></li>
+    <li><a href="/booking_system/register/">注册</a></li>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+  <form action="{% url 'booking_system:fill_information' flight_id=flight_id dept_datetime=dept_datetime ticket_num=ticket_num %}" method="POST">
+    {% csrf_token %}
+    <h2> 填写乘机人信息 </h2>
+    {% for i in sequence %}
+    <div class="person-info">
+      <h3> 乘机人{{ forloop.counter }} </h2>
+
+      {% if wrong_index == i %}
+      <div class="form-group has-error">
+        {% with idx=i|stringformat:"i" %}
+        <label for={{ "inputName" | add:idx }}> 姓名 </label>
+        <input type="text" id={{ "inputName" | add:idx }} name={{ "name" | add:idx }} class="form-control" aria-describedby={{ "helpBlock" | add:idx }} required>
+        <span id={{ "helpBlock" | add:idx }} class="help-block"> 个人信息错误 </span>
+        {% endwith %}
+      </div>
+      {% elif not_enough %}
+      <div class="form-group has-error">
+        {% with idx=i|stringformat:"i" %}
+        <label for={{ "inputName" | add:idx }}> 姓名 </label>
+        <input type="text" id={{ "inputName" | add:idx }} name={{ "name" | add:idx }} class="form-control" aria-describedby={{ "helpBlock" | add:idx }} required>
+        <span id={{ "helpBlock" | add:idx }} class="help-block"> 舱位数量不足 </span>
+        {% endwith %}
+      </div>
+      {% else %}
+      <div class="form-group">
+        {% with idx=i|stringformat:"i" %}
+        <label for={{ "inputName" | add:idx }}> 姓名 </label>
+        <input type="text" id={{ "inputName" | add:idx }} name={{ "name" | add:idx }} class="form-control" required>
+        {% endwith %}
+      </div>
+      {% endif %}
+
+      <div class="form-group">
+        {% with idx=i|stringformat:"i" %}
+        <label for={{ "inputID" | add:idx }}> ID </label>
+        <input type="text" id={{ "inputID" | add:idx }} name={{ "ID" | add:idx }} class="form-control" required>
+        {% endwith %}
+      </div>
+
+      <div class="form=group">
+        {% with idx=i|stringformat:"i" %}
+        <label for={{ "inpuCabin" | add:idx }}> 舱位 </label>
+        <select class="form-control" id={{ "inpuCabin" | add:idx }} name={{ "cabin" | add:idx }} required>
+          <option> 头等舱 </option>
+          <option> 商务舱 </option>
+          <option> 经济舱 </option>
+        </select>
+        {% endwith %}
+      </div>
+    </div>
+    {% endfor %}
+
+    <div class="form-group">
+      <button class="btn btn-lg btn-primary btn-block" type="submit"> 确定 </button>
+    </div>
+  </form>
+
+</div> <!-- /container -->
+
+{% endblock %}

@@ -1,0 +1,6 @@
+代码为Django项目文件结构
+主要功能定义在booking_system的view.py和url.py中
+html文件在templates文件夹中
+数据库定义代码文件在sql文件夹中
+界面美化的CSS文件在static文件夹中
+

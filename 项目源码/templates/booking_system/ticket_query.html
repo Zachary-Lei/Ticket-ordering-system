@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+  订票系统：机票详情
+{% endblock %}
+
+{% block css %}
+  <link href="{% static 'css/ticket_query.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block navbar_right %}
+  {% if is_login %}
+    <li><a> {{ username }} </a></li>
+    <li><a href="/booking_system/logout/"> 注销 </a></li>
+  {% else %}
+    <li><a href="/booking_system/login/">登录</a></li>
+    <li><a href="/booking_system/register/">注册</a></li>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+  <div class="container">
+    <h1> <br/> <br/> 机票详情 </h1>
+  </div>
+</div>
+  
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <form class="form-horizontal" role="form" action="{% url 'booking_system:order_query' %}" method="POST">
+        {% csrf_token %}
+
+        <fieldset>
+          <legend> ticket </legend>
+        </fieldset>
+
+      </form>
+
+    </div>
+  </div>
+
+
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col" class="col-md-1 header-cell"> 顾客 </th>
+        <th scope="col" class="col-md-1 header-cell"> 航班号 </th>
+        <th scope="col" class="col-md-1 header-cell"> 飞行日期 </th>
+        <th scope="col" class="col-md-1 header-cell"> 类别 </th>
+        <th scope="col" class="col-md-1 header-cell">  出发地 </th>
+        <th scope="col" class="col-md-1 header-cell">  目的地 </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for tp in result %}
+      <tr class="info-row">
+        <td class="body-cell"> {{ tp.person_name }} </td>
+        <td class="body-cell"> {{ tp.flight_id }} </td>
+        <td class="body-cell"> {{ tp.flight_date }} </td>
+        <td class="body-cell"> {{ tp.class }} </td>
+        <td class="body-cell"> {{ tp.dept_airport }} </td>
+        <td class="body-cell"> {{ tp.dest_airport }} </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+
+  {% if show_table %}
+
+  <table class="table table-hover">
+
+    <tbody>
+      
+      <tr class="info-row">
+
+        <td class="body-cell">
+          <a href="{% url 'booking_system:order_status_update' order_id=the_order_id %}" class="btn btn-lg btn-primary"> buy </a>
+        </td>
+
+      </tr>
+
+    </tbody>
+  </table>
+
+  {% endif %}
+
+
+</div>
+{% endblock %}
